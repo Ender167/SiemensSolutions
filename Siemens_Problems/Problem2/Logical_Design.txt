@@ -1,0 +1,35 @@
+Each question will be represented as an object of type Question with the following parameters:
+id (int), question (string), options (array of possible answers), answer (the id of the correct
+answer) and wasAnswered (boolean).
+
+An answer is an instance of class Answer. It holds the id (int) of the answer and the answer
+itself (string).
+
+All questions are managed by a QuestionRepository object, which maintains a list of all questions.
+The ids of the questions are assigned here in order to guarrantee their uniqueness. The repository
+also holds the position of the current question and the next id to be assigned for a new question.
+
+The user score will be maintained by a ScoreHolder object. Every time we wish to modify the score,
+the current question and the provided answer will be validated here.
+
+-Before the quiz starts, the system will generate the Question objects and add them to the QuestionRepository
+object. The Question objects are created from a predefined set of questions, where each predefined question
+is split between 3 arrays: question text array, which holds the question itself, answers array, an array which
+contains the 4 available answers for a question, and the correct answers array which holds the id of the correct
+answer. For example, the first question has its question text on the first position in the question
+text array, its answers in the first position of the answers array and its correct answer in the first
+position of the correct answers array. The same rule applies for all remaining questions.
+
+-After that, we shuffle the questions. Using the Fisher-Yates algorithm, we start from the last element
+and swap it with another randomly selected element from the array. We repeat this process until we reach
+the first element, and at this point we will have a random permutation of the original array.
+
+-Once the question array is prepared, we can display the first question on the web page. We get the first
+question from the question repository and relevant html elements and use them to display the following
+information to the user: number of the current question, total number of questions, question text, all 4
+options and submit button. When the user selects an option and clicks the submit button, a method is called
+to determine what was selected. Then we pass the question and the selected answer to the ScoreHolder, which
+determines if the scored should be increased or not. The described process repeats for every question until
+all are answered.
+
+

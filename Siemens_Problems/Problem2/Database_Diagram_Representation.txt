@@ -1,0 +1,43 @@
+Database diagram:
+
+For the Answer table we have:
+fields: id (int) primary key, answerText (char), questionId (int) foreign key
+
+For the Question table we have:
+fields: id (int) primary key, questionText (char), correctAnswer (int), repositoryId (int) foreign key
+
+For the QuestionRepository we have:
+fields: id (int) primary key, scoreId (int) foreign key
+
+For the ScoreHolder table we have:
+fields: id (int) primary key, score(int)
+
+The foreign key questionId on the Answer table references the primary key id on the Question table.
+The foreign key repositoryId on the Question table references the primary key id on the QuestionRepository table.
+The foreign key scoreId on the QuestionRepository table references the primary key id on the ScoreHolder table.
+
+While the question table holds all the available questions, with the QuestionRepository table we can group up
+several questions into a set of questions. Each set of questions has a score associated with it.
+
+The only times the application will interact with the database will be at quiz session start and quiz session
+end steps. At initialization, we retrieve the required questions and when the session ends, we store the new
+score if necessary.
+
+At the beginning of the quiz, we can select all questions belonging to a set of questions and add all rows
+to a repository. The data is then handled stricly by the internal repository during the quiz. At the end of
+the quiz session (the end is marked when user submits the answer to the last question), we can update the score
+in the database for a given set if the new score is higher, for example.
+
+However, if we have only one set of questions and we know that only one set will ever be needed, then the
+QuestionRepository and ScoreHolder tables will no longer be needed. For score keeping, we can add a score field directly
+to the Question table. All the quetions from the Question table will form one set and each question will have the 
+same associated score, since the score is calculated based on correct answers given to the entire quiz. In this case,
+at the start of the quiz we will retrieve all questions from the Question table, and when the session ends, we can then
+alter the score field on all questions to reflect the new obtained score.
+
+The first approach offers flexibility, since we can add any number of sets of questions, while also maintaining a separate
+score for each. If we expect to have many questions organized in many sets, then this approach will satisfy that requirement.
+
+The second approach lacks in flexibility, but it offers a more simple solution if the scope of the problem is small. If
+we expect a relatively small number of questions organized in exactly one set, then this approach will offer a simple and
+serviceable solution, while also allowing for more development time to be spent on application features deemed more important.

@@ -1,0 +1,7 @@
+
+Implementation for entities is stored in the Scripts folder.
+Quiz initialization, question shuffle and user input handling are implemented in
+the main.html file.
+In order to look at the source code, open the main.html and any of the javascript
+files in a text editor.
+In order to run the web application, open the main.html file in any browser.

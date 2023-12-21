@@ -1,0 +1,39 @@
+Class Diagram:
+
+For all the classes presented below, the attributes are private and the methods are public.
+
+For the Answer class, the following should be present:
+attributes: id (int), answerText (string)
+methods: getter and setter method for all attributes
+
+For the Question class, the following should be present:
+attributes: id (int), questionText (string), answers (array of size 4 made of Answer entities), correctAnswer (int)
+methods: getter and setter method for all attributes, checkAnswer(int)
+
+For the QuestionRepository class, the following should be present:
+attributes: questionArray (array of questions), lastId (int), currentQuestion(int)
+methods: add(Question), getNextQuestion(), getCurrentQuestion(), isTestDone(), setQuestionState(bool), resetRepository()
+
+For the ScoreHolder class, the following should be present:
+attributes: score(int)
+methods: getScore(), alterScore(Question, Answer)
+
+Between Answer and Question, there must be a composition relation with multiplicity 4 on the side of Answer, since
+an answer cannot exist by itself without a question and a question also requires exactly 4 answers.
+
+Between Question and QuestionRepository, there must be a composition relation with multiplicity 0..* on the side of
+Question and multiplicity 1 on the side of QuestionRepository. Questions cannot exist outside the repository, a repository
+can have 0 or more questions and there is always only one repository at a time.
+
+Betweem QuestionRepository and ScoreHolder, there is a one-to-one association because there can be only one ScoreHolder
+for a set of questions.
+
+At the beginning of the quiz, a QuestionRepository object and several Question entities are created. When a QuestionRepository
+object is created, a ScoreHolder object is also made. For each question, a set of 4 Answer entities is assigned. The answers
+are stored at the Question class level and the questions are stored at the QuestionRepository level. When a question is added
+to the repository, it receives a unique id. During the quiz, we call methods to the repository to handle the question objects,
+such as getting the next question for the user. No question or answer entities are altered in any way during the quiz, except
+for question id assignment at the start. When the user submits an answer, the score holder object decides if the score should
+increase based on the answer given by the user. At the end of the quiz, we retrieve the score from the ScoreHolder and present
+it to the user.
+

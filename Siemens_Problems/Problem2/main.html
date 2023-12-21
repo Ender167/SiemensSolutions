@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="Scripts/Question.js"></script>
+    <script src="Scripts/Answer.js"></script>
+    <script src="Scripts/QuestionRepository.js"></script>
+    <script src="Scripts/ScoreHolder.js"></script>
+    <link href="StyleSheet.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style></style>
+  </head>
+  <body>
+    <div id="quiz-container">
+      <h2 id="q_header">Question 1/50</h2>
+      <p id="q1">What is the capital of France?</p>
+      <div class="question">
+        <label>
+          <input type="radio" name="answer" class="answer" value="1">
+          <span id="l1">Paris</span>
+        </label>
+        <label>
+          <input type="radio" name="answer" class="answer" value="2">
+          <span id="l2">Paris</span>
+        </label>
+        <label>
+          <input type="radio" name="answer" class="answer" value="3">
+          <span id="l3">Paris</span>
+        </label>
+        <label>
+          <input type="radio" name="answer" class="answer" value="4">
+          <span id="l4">Paris</span>
+        </label>
+      </div>
+      <button id="submit-btn" onclick="submitAnswer()">Submit</button>
+    </div>
+    <div id="score-container" style="display: none;">
+      <h3>Your Score:</h3>
+      <p id="user-score">0</p>
+      <button id="submit-btn" onclick="restartTest()">Restart</button>
+    </div>
+<script>
+
+
+let questionRepo = new QuestionRepository();
+let score = questionRepo.score;
+
+initializeQuestions();
+
+function initializeQuestions() {
+// Starting method of the quiz. Questions are created, shuffled and added to the repository object.
+// Parameters: Nothing
+// Returns: Nothing
+
+	const questions = ["Metallic element with symbol 'Fe'?",
+		"Chemical symbol for gold?",
+		"Outer layer of the Earth?",
+		"Smallest planet in our solar system?",
+		"Process of plants making food?",
+		"Unit of electrical resistance?",
+		"Organ that pumps blood?",
+		"Chemical symbol for oxygen?",
+		"Natural satellite of Earth?",
+		"Study of living organisms?",
+		
+		"What is the square root of 144",
+		"In a right-angled triangle, what is the length of the hypotenuse if the other two sides are 3 and 4 units long?",
+		"What is the result of 7 multiplied by 9?",
+		"If x + 5 = 10, what is the value of x?",
+		"What is the area of a rectangle with a length of 8 units and a width of 5 units?",
+		
+		"121 Divided by 11 is :",
+		"60 Times of 8 Equals to :",
+		"Find the Missing Term in Multiples of 6 : 6, 12, 18, 24, _, 36, 42, _ 54, 60 ",
+		"What is the Next Prime Number after 7",
+		"The Product of 131 × 0 × 300 × 4 ",
+		"Solve 3 + 6 × ( 5 + 4) ÷ 3 - 7 ",
+		"Solve 23 + 3 ÷ 3 ",
+		"What does 6% equal to?",
+		"How Many Years are there in a Decade?",
+		"How Many Months Make a Century?",
+		
+		"The average of first 50 natural numbers is: ",
+		"The number of 3-digit numbers divisible by 6, is",
+		"When was the Great Crash of Wall Street?",
+		"Which country did Hitler invade on the 1st of September 1939?",
+		"When did the wall of Berlin fall? ",
+		
+		"What is the best case for linear search?",
+		"What is the worst case for linear search?",
+		"Which of the following is not the type of queue?",
+		"Which is the most appropriate data structure for reversing a word?",
+		"A loop that never ends is referred to as a(n): ",
+		
+		"In which of the following languages is function overloading not possible?",
+		"What is the size of the int data type (in bytes) in C?",
+		"Which data structure is used to handle recursion in C?",
+		"Which is not a valid keyword in C language?",
+		"What is the extension of a C language source file?",
+		
+		"What is the square of 15?",
+		"What is the greatest two digit number?",
+		"How much is 90 – 19?",
+		"What is the smallest three digit number?",
+		"Find the sum of 111 + 222 + 333",
+		"Find the product of 72 × 3",
+		"2 is a …………… number.",
+		"How many hours are in 90 minutes?",
+		"How many lines can be drawn through two points?",
+		"An acute angle is ……."
+		
+	];
+
+	const options = [
+		[new Answer(1, "Gold"), new Answer(2, "Iron"), new Answer(3, "Silver"), new Answer(4, "Copper")],
+		[new Answer(1, "Au"), new Answer(2, "Ag"), new Answer(3, "Cu"), new Answer(4, "Fe")],
+		[new Answer(1, "Mantle"), new Answer(2, "Core"), new Answer(3, "Crust"), new Answer(4, "Atmosphere")],
+		[new Answer(1, "Venus"), new Answer(2, "Mars"), new Answer(3, "Mercury"), new Answer(4, "Earth")],
+		[new Answer(1, "Respiration"), new Answer(2, "Digestion"), new Answer(3, "Photosynthesis"), new Answer(4, "Transpiration")],
+		[new Answer(1, "Ampere"), new Answer(2, "Volt"), new Answer(3, "Ohm"), new Answer(4, "Watt")],
+		[new Answer(1, "Lungs"), new Answer(2, "Liver"), new Answer(3, "Heart"), new Answer(4, "Kidney")],
+		[new Answer(1, "O2"), new Answer(2, "CO2"), new Answer(3, "H2O"), new Answer(4, "O")],
+		[new Answer(1, "Mars"), new Answer(2, "Jupiter"), new Answer(3, "Moon"), new Answer(4, "Venus")],
+		[new Answer(1, "Physics"), new Answer(2, "Chemistry"), new Answer(3, "Biology"), new Answer(4, "Geology")],
+		
+		[new Answer(1, "12"), new Answer(2, "14"), new Answer(3, "16"), new Answer(4, "18")],
+		[new Answer(1, "5"), new Answer(2, "7"), new Answer(3, "9"), new Answer(4, "11")],
+		[new Answer(1, "56"), new Answer(2, "63"), new Answer(3, "72"), new Answer(4, "81")],
+		[new Answer(1, "2"), new Answer(2, "5"), new Answer(3, "7"), new Answer(4, "10")],
+		[new Answer(1, "20"), new Answer(2, "30"), new Answer(3, "35"), new Answer(4, "40")],
+		
+		[new Answer(1, "11"), new Answer(2, "10"), new Answer(3, "19"), new Answer(4, "18")],
+		[new Answer(1, "480"), new Answer(2, "300"), new Answer(3, "250"), new Answer(4, "400")],
+		[new Answer(1, "32, 45"), new Answer(2, "30, 48"), new Answer(3, "24, 40"), new Answer(4, "25, 49")],
+		[new Answer(1, "13"), new Answer(2, "12"), new Answer(3, "14"), new Answer(4, "11")],
+		[new Answer(1, "11"), new Answer(2, "0"), new Answer(3, "46"), new Answer(4, "45")],
+		[new Answer(1, "11"), new Answer(2, "16"), new Answer(3, "14"), new Answer(4, "15")],
+		[new Answer(1, "24"), new Answer(2, "25"), new Answer(3, "26"), new Answer(4, "27")],
+		[new Answer(1, "0.06"), new Answer(2, "0.6"), new Answer(3, "0.006"), new Answer(4, "0.0006")],
+		[new Answer(1, "5"), new Answer(2, "10"), new Answer(3, "15"), new Answer(4, "20")],
+		[new Answer(1, "12"), new Answer(2, "120"), new Answer(3, "1200"), new Answer(4, "12000")],
+		
+		[new Answer(1, "25.30"), new Answer(2, "25.5"), new Answer(3, "25"), new Answer(4, "12.25")],
+		[new Answer(1, "149"), new Answer(2, "166"), new Answer(3, "150"), new Answer(4, "151")],
+		[new Answer(1, "1929"), new Answer(2, "1939"), new Answer(3, "1949"), new Answer(4, "1959")],
+		[new Answer(1, "Austria"), new Answer(2, "The Netherlands"), new Answer(3, "Poland"), new Answer(4, "France")],
+		[new Answer(1, "1979"), new Answer(2, "1983"), new Answer(3, "1986"), new Answer(4, "1989")],
+		
+		[new Answer(1, "O(nlogn)"), new Answer(2, "O(logn)"), new Answer(3, "O(n)"), new Answer(4, "O(1)")],
+		[new Answer(1, "O(nlogn)"), new Answer(2, "O(logn)"), new Answer(3, "O(n)"), new Answer(4, "O(1)")],
+		[new Answer(1, "Priority queue"), new Answer(2, "Circular Queue"), new Answer(3, "Single ended queue"), new Answer(4, "Ordinary queue")],
+		[new Answer(1, "Stack"), new Answer(2, "Queue"), new Answer(3, "Graph"), new Answer(4, "Tree")],
+		[new Answer(1, "while loop"), new Answer(2, "infinite loop"), new Answer(3, "for loop"), new Answer(4, "recursive loop")],
+		
+		[new Answer(1, "C"), new Answer(2, "C++"), new Answer(3, "Java"), new Answer(4, "Python")],
+		[new Answer(1, "4"), new Answer(2, "8"), new Answer(3, "2"), new Answer(4, "1")],
+		[new Answer(1, "Queue"), new Answer(2, "Stack"), new Answer(3, "Deque"), new Answer(4, "Tree")],
+		[new Answer(1, "for"), new Answer(2, "while"), new Answer(3, "do-while"), new Answer(4, "switch")],
+        [new Answer(1, ".c"), new Answer(2, ".cpp"), new Answer(3, ".c99"), new Answer(4, ".h")],
+		
+		[new Answer(1, "15"), new Answer(2, "30"), new Answer(3, "252"), new Answer(4, "225")],
+		
+		[new Answer(1, "999"), new Answer(2, "120"), new Answer(3, "712"), new Answer(4, "99")],
+		
+		[new Answer(1, "70"), new Answer(2, "71"), new Answer(3, "80"), new Answer(4, "69")],
+		[new Answer(1, "100"), new Answer(2, "101"), new Answer(3, "30"), new Answer(4, "12")],
+		[new Answer(1, "777"), new Answer(2, "555"), new Answer(3, "222"), new Answer(4, "666")],
+		[new Answer(1, "218"), new Answer(2, "302"), new Answer(3, "216"), new Answer(4, "225")],
+		[new Answer(1, "negative"), new Answer(2, "even"), new Answer(3, "odd"), new Answer(4, "composite")],
+		[new Answer(1, "1.5"), new Answer(2, "1.3"), new Answer(3, "2"), new Answer(4, "2.25")],
+		[new Answer(1, "2"), new Answer(2, "3"), new Answer(3, "infinite"), new Answer(4, "1")],
+		[new Answer(1, ">90 degrees"), new Answer(2, "=90 degrees"), new Answer(3, "<90 degrees"), new Answer(4, ">120 degrees")]
+		
+	];
+
+	const answers = [2,
+		1,
+		3,
+		3,
+		3,
+		3,
+		3,
+		4,
+		3,
+		3,
+		
+		1,
+		1,
+		2,
+		2,
+		4,
+		
+		1,
+		1,
+		2,
+		4,
+		2,
+		3,
+		1,
+		1,
+		2,
+		3,
+		
+		2,
+		3,
+		1,
+		3,
+		4,
+		
+		4,
+		3,
+		3,
+		1,
+		2,
+		
+		1,
+		1,
+		2,
+		3,
+		1,
+		
+		4,
+		1,
+		2,
+		1,
+		4,
+		3,
+		2,
+		1,
+		4,
+		3
+	];
+
+	for (let i = 0; i < questions.length; i++) {
+		let q = new Question(i, questions[i], options[i], answers[i]);
+		questionRepo.add(q);
+	}
+
+	console.log(questionRepo.arr);
+	shuffle(questionRepo.arr);
+	
+	// Display to the user the initial question
+	displayNextQuestion();
+
+}
+
+function displayNextQuestion() {
+// Gets all relevant html elements and displays the next question.
+// Parameters: Nothing
+// Returns: Nothing
+	let nextQuestion = questionRepo.getNextQuestion();
+
+	let q_header = document.getElementById("q_header");
+	let q1 = document.getElementById("q1");
+	let l1 = document.getElementById("l1");
+	let l2 = document.getElementById("l2");
+	let l3 = document.getElementById("l3");
+	let l4 = document.getElementById("l4");
+
+	let nrQ = questionRepo.currentQuestion + 1;
+	q_header.textContent = "Question " + nrQ + "/" + questionRepo.arr.length;
+	q1.innerHTML = nextQuestion.question;
+	l1.textContent = nextQuestion.options[0].message;
+	l2.textContent = nextQuestion.options[1].message;
+	l3.textContent = nextQuestion.options[2].message;
+	l4.textContent = nextQuestion.options[3].message;
+
+
+}
+
+function shuffle(array) {
+// Shuffles a given array.
+// Parameters: array of any type
+// Returns: Nothing
+
+	let currentIndex = array.length, randomIndex;
+
+	while (currentIndex > 0) {
+
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex--;
+
+		[array[currentIndex], array[randomIndex]] = [
+			array[randomIndex], array[currentIndex]
+		];
+	}
+
+}
+
+function restartTest() {
+// Reset the quiz to the initial state.
+// Parameters: Nothing
+// Returns: Nothing
+
+	document.getElementById('quiz-container').style.display = 'block';
+	document.getElementById('score-container').style.display = 'none';
+
+	questionRepo.resetRepository();
+	console.log(questionRepo.arr);
+	shuffle(questionRepo.arr);
+	displayNextQuestion();
+
+}
+
+function submitAnswer() {
+// Callback for submit button at a question. Advance the quiz to the next question if any option is selected.
+// Parameters: Nothing
+// Returns: Nothing
+	var radioButtons = document.getElementsByName('answer');
+
+	for (let i = 0; i < radioButtons.length; i++) {
+		if (radioButtons[i].checked) {
+			let ans = parseInt(radioButtons[i].value);
+			let currentQ = questionRepo.getCurrentQuestion();
+			
+			score.alterScore(currentQ, ans);
+			currentQ.wasAnswered = true;
+			
+			displayNextQuestion();
+			
+			radioButtons[i].checked = false;
+			break;
+		}
+	}
+
+    // If test is done, then display the score and a restart button to the user.
+	if (questionRepo.isTestDone() == true) {
+		document.getElementById('quiz-container').style.display = 'none';
+		document.getElementById('score-container').style.display = 'block';
+		document.getElementById('user-score').textContent = score.getScore();
+	}
+}
+
+</script>
+
+</body>
+</html>
